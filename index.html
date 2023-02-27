@@ -40,8 +40,7 @@
     <h1 id="title">OpenAttestationMerkleProofSignature2018</h1>
     <section id="abstract">
       <p>
-        This specification defines the signature format for use with This
-        specification defines the proof format used in
+        This specification defines the proof format used in
         <a
           href="https://www.openattestation.com/docs/docs-section/roadmap/v3/overview"
           >OpenAttestation V3 Verifiable Credentials</a
@@ -66,27 +65,6 @@
         privacy and data minimization techniques are desired and/or required.
       </p>
       <section>
-        <h3>Use Cases and Requirements</h3>
-        <ul>
-          <li>
-            This section describes the use case of verifiable credentials in
-            maritime cross-border trade.
-          </li>
-          <li>
-            The verifiable credential may be passed to multiple parties in the
-            supply chain.
-          </li>
-          <li>
-            Along the chain, parties may wish to redact sensitive information
-            before passing to the next party.
-          </li>
-          <li>
-            This use case requires a lossy progressive disclosure scheme that
-            does not break the original signature.
-          </li>
-        </ul>
-      </section>
-      <section>
         <h3>OpenAttestation</h3>
         <p>
           OpenAttestation is an open-source framework for implementing
@@ -107,6 +85,28 @@
           </li>
         </ul>
       </section>
+      <section>
+        <h3>Use Cases and Requirements</h3>
+        <ul>
+          <li>
+            This section describes an example use case of OpenAttestation verifiable credentials, in
+            cross-border trade.
+          </li>
+          <li>
+            The verifiable credential may be passed to multiple parties in the
+            supply chain.
+          </li>
+          <li>
+            Along the chain, parties may wish to redact sensitive information
+            before passing to the next party.
+          </li>
+          <li>
+            This use case requires a lossy progressive disclosure scheme that
+            does not break the original signature.
+          </li>
+        </ul>
+      </section>
+      
       <section id="conformance">
         <!-- This section is filled automatically by ReSpec. -->
       </section>
