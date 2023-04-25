@@ -39,7 +39,7 @@ privacy and data minimization techniques are desired and/or required.
 
 ## OpenAttestation
 OpenAttestation is an open-source framework for implementing
-verifiable credentials. It has been used in production:
+verifiable credentials. It has been used in production since 2018. OpenAttestation has been implemented:
 - For educational institutions to issue <a href="https://www.opencerts.io/">academic credentials</a> to graduates;
 - For healthcare clinics to issue <a href="https://www/healthcerts.gov.sg/">COVID-19 pre-departure test and vaccination records</a> in line with international standards and the Singapore government.
 - For the trade, finance and logistics community to issue <a href="https://www.tradetrust.io/">verifiable trade documents</a>
