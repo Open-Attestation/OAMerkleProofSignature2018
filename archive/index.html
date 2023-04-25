@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script
+      src="https://www.w3.org/Tools/respec/respec-w3c"
+      async
+      class="remove"
+    ></script>
+    <script class="remove">
+      // All config options at https://respec.org/docs/
+      var respecConfig = {
+        // Working Groups ids at https://respec.org/w3c/groups/
+        group: "webapps",
+        specStatus: "unofficial",
+        editors: [
+          {
+            name: "Kyle Huang Junyuan",
+            url: "https://github.com/HJunyuan",
+            company: "GovTech Singapore",
+            companyURL: "https://www.tech.gov.sg/",
+          },
+          {
+            name: "Kylie Goh",
+            url: "https://github.com/kyliegohjy",
+            company: "GovTech Singapore",
+            companyURL: "https://www.tech.gov.sg/",
+          },
+        ],
+        github: {
+          branch: "main",
+          repoURL: "Open-Attestation/OAMerkleProofSignature2018",
+        },
+        // See https://respec.org/docs/#xref for usage.
+        xref: "web-platform",
+      };
+    </script>
+  </head>
+  <body>
+    <h1 id="title">OpenAttestationMerkleProofSignature2018</h1>
+    <section id="abstract">
+      <p>
+        This specification defines the proof format used in
+        <a
+          href="https://www.openattestation.com/docs/docs-section/roadmap/v3/overview"
+          >OpenAttestation V3 Verifiable Credentials</a
+        >, which features a lossy progressive selective redaction scheme
+        compatible with
+        <a href="https://www.w3.org/TR/vc-data-model/"
+          >W3C Verifiable Credentials</a
+        >.
+      </p>
+    </section>
+    <section id="sotd">
+      <!-- This is required. -->
+      <!-- This section is filled automatically by ReSpec. -->
+    </section>
+    <section>
+      <h2>Introduction</h2>
+      <p>
+        Selective redaction is a desirable property of verifiable credentials.
+        OpenAttestation implements a lossy progressive selective redaction
+        scheme, which allows it to be used in applications where a verifiable
+        credential is passed along a chain of multiple verifiers and where
+        privacy and data minimization techniques are desired and/or required.
+      </p>
+      <section>
+        <h3>OpenAttestation</h3>
+        <p>
+          OpenAttestation is an open-source framework for implementing
+          verifiable credentials. It has been used in production since 2018. 
+          OpenAttestation has been implemented:
+        </p>
+        <ul>
+          <li>
+            For educational institutions to issue
+            <a href="https://www.opencerts.io/">academic credentials</a> to
+            graduates;
+          </li>
+          <li>
+            For healthcare clinics to issue
+            <a href="https://www/healthcerts.gov.sg/"
+              >COVID-19 pre-departure test and vaccination records</a
+            >
+            in line with international standards and the Singapore government.
+          </li>
+          <li>
+            For the trade, finance and logistics community to issue
+            <a href="https://www.tradetrust.io/">verifiable trade documents</a>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3>Use Cases and Requirements</h3>
+        <ul>
+          <li>
+            This section describes an example use case of OpenAttestation verifiable credentials, in
+            cross-border trade.
+          </li>
+          <li>
+            The verifiable credential may be passed to multiple parties in the
+            supply chain.
+          </li>
+          <li>
+            Along the chain, parties may wish to redact sensitive information
+            before passing to the next party.
+          </li>
+          <li>
+            This use case requires a lossy progressive disclosure scheme that
+            does not break the original signature.
+          </li>
+        </ul>
+      </section>
+      
+      <section id="conformance">
+        <!-- This section is filled automatically by ReSpec. -->
+      </section>
+      <section>
+        <h3>Terminology</h3>
+        <p>Placeholder for any new terminology that needs to be introduced.</p>
+        <section>
+          <h4>
+            <dfn data-dfn-for="rawDocument">Raw Document</dfn>
+            <!-- TODO: Make definition for raw document -->
+            <p>...</p>
+          </h4>
+        </section>
+        <section>
+          <h4>
+            <dfn data-dfn-for="documentStore">Document Store</dfn>
+            <!-- TODO: Make definition for document store -->
+            <p>...</p>
+          </h4>
+        </section>
+      </section>
+    </section>
+    <section>
+      <h2><dfn data-dfn-for="producing">Producing</dfn></h2>
+      <section>
+        <h3><dfn data-dfn-for="wrapping">Wrapping</dfn></h3>
+        <p>
+          To generate an OpenAttestationMerkleProof2018 signature, the raw
+          document first goes through a process we call [= wrapping =]. In this
+          process, salts are generated for every property of the credential
+          object in order to prevent rainbow table attack. They are then
+          flattened and encoded as a string and embedded in
+          <code>proof.salts</code> (<a
+            href="https://github.com/Open-Attestation/oa-verify/blob/edeccf6b4c4613dc43c4eb7a0d97fce4897cad93/test/fixtures/v3/did-wrapped.json#L64"
+            >see example</a
+          >).
+        </p>
+        <p>
+          Once the [= rawDocument/raw document =] has been salted, each field
+          will be hashed with the value and salt. The output hashes will then be
+          sorted and stored in an array.
+        </p>
+        <p>
+          Finally, with the array of sorted hashes, the stringified array is
+          hashed again and embedded in <code>proof.targetHash</code> and
+          <code>proof.merkleRoot</code> (same if only 1 raw document is wrapped
+          at a time).
+        </p>
+      </section>
+      <section>
+        <h3>Issuance</h3>
+        <p>
+          To issue an OpenAttestation Verifiable Credential, the proof.merkleRoot is signed with
+          the Decentralised Identifier (DID) of the issuer and embedded in the
+          <code>proof.proofs</code> property of the Verifiable Credential.
+        </p>
+        <aside
+          class="example"
+          title="Proof object of a Verifiable Credential signed with a DID"
+        >
+          <pre class="json">
+            {
+              // ...
+              "proof": {
+                "type": "OpenAttestationMerkleProofSignature2018",
+                "proofPurpose": "assertionMethod",
+                "targetHash": "82f51d6eb620e4264dff0ac2b9d99a965a88ff51e46192bb4808ea969ee67402",
+                "proofs": [
+                  "a1c633145bc0f37105fe510d335376c1919a6cf51030628877288bdee5541c22",
+                  "c3d7c5908f25eba67baf7f607932f1924acdb7a6cf04ad5408dba251bf0a47bc",
+                  "94c07ddcc4a2ade59e3120dce9f19f0f4ad80a58943555f4b51af4668b1c1d62"
+                ],
+                "merkleRoot": "f43045b0c57072a044e810b798e32b8c1de1d0d0c5774d55c8eed1f3fdec6438",
+                "salts": "abc...",
+                "privacy": {
+                  "obfuscated": []
+                },
+                "key": "did:ethr:0x1245e5B64D785b25057f7438F715f4aA5D965733#controller",
+                "signature": "0x4a054aaf881da5130a3b19160a7f0ce1afef1fe093c83be438c8c40b0a04ace5142f3d48a23c8ce7c32fabe04fc69e6fd4c94cf3ceb4adb4f3da5fa937208d4e1c"
+              }
+            }
+          </pre>
+          <p>
+            See full example
+            <a
+              href="https://github.com/Open-Attestation/oa-verify/blob/edeccf6b4c4613dc43c4eb7a0d97fce4897cad93/test/fixtures/v3/did-signed.json#L62-L66"
+              >here</a
+            >.
+          </p>
+          <p>
+          The OpenAttestation Verifiable Credential can also be issued by publishing the proof.merkleRoot to a Verifiable Data Registry.
+        </p>
+        </aside>
+      </section>
+    </section>
+    <section>
+      <h2>Cryptography Suites and Libraries</h2>
+      <p>
+        The OpenAttestation implementation of the algorithm described above uses
+        the <code>keccak256</code> hash to transform properties into the
+        <code>targetHash</code>, and ECDSA with Secp256k1 to sign the
+        <code>targetHash</code>. However, the algorithm is not permanently tied
+        to these cryptography suites. In the event that they fall to new attacks
+        and technology advances, this specification will be updated to upgrade
+        the cryptography suites used.
+      </p>
+    </section>
+    <section>
+      <h2>Redacting</h2>
+      <p>
+        To obfuscate a property in the OpenAttestation Verifiable Credential,
+        the key-value pair is hashed and the resulting hash is stored in the
+        <code>privacy.obfuscatedData property</code>. The obfuscated object is
+        removed. This method can be used to obfuscate multiple key-value pairs
+        in the credential.
+      </p>
+      <p>
+        Obfuscation does not invalidate the <code>proof</code> property as the
+        <code>targetHash</code> is computed over all hashed key-value pairs in
+        the credential.
+      </p>
+    </section>
+    <section>
+      <h2>Verifying</h2>
+      <p>
+        To verify the integrity of the document, the verifier computes the
+        <code>targetHash</code> via the same process in [= producing/Producing
+        =], namely by hashing individual key-value pairs, appending and sorting
+        the hashes of the individual key-value pairs with the hashes from
+        <code>privacy.obfuscatedData</code>, and computing the
+        <code>targetHash</code> from the array of sorted hashes. The verifier
+        then checks that the computed hash matches the <code>targetHash</code>.
+        Where the <code>targetHash</code> is signed with the issuer's DID, the
+        verifier utilises the DID verification method to verify the signature.
+      </p>
+    </section>
+    <section>
+      <h2>Examples</h2>
+      <section>
+        <h3>Certificate of Origin</h3>
+        <p>...</p>
+      </section>
+    </section>
+  </body>
+</html>
