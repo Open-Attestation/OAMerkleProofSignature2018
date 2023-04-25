@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "oamerkleproofsignature2018"
+version = "0.1.0"
+description = "Repository housing the OAMerkleProofSignature2018 proposal spec"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+bikeshed = "^3.11.22"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
