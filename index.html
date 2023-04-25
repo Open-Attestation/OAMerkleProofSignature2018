@@ -68,7 +68,8 @@
         <h3>OpenAttestation</h3>
         <p>
           OpenAttestation is an open-source framework for implementing
-          verifiable credentials. It has been used in production:
+          verifiable credentials. It has been used in production since 2018. 
+          OpenAttestation has been implemented:
         </p>
         <ul>
           <li>
@@ -82,6 +83,10 @@
               >COVID-19 pre-departure test and vaccination records</a
             >
             in line with international standards and the Singapore government.
+          </li>
+          <li>
+            For the trade, finance and logistics community to issue
+            <a href="https://www.tradetrust.io/">verifiable trade documents</a>
           </li>
         </ul>
       </section>
@@ -131,18 +136,6 @@
     </section>
     <section>
       <h2><dfn data-dfn-for="producing">Producing</dfn></h2>
-      <p>
-        There are 2 main methods to issuing or signing a Verifiable Credential
-        with OpenAttestationMerkleProof2018:
-      </p>
-      <ol>
-        <li>
-          Issuing onto a [= documentStore/document store =] (a smart contract on
-          the Ethereum network that records the issuance and revocation status
-          of OpenAttestation documents); or
-        </li>
-        <li>Signing with a decentralised identifier (DID)</li>
-      </ol>
       <section>
         <h3><dfn data-dfn-for="wrapping">Wrapping</dfn></h3>
         <p>
@@ -169,46 +162,9 @@
         </p>
       </section>
       <section>
-        <h3>Issued onto the Document Store</h3>
+        <h3>Issuance</h3>
         <p>
-          For issued Verifiable Credentials, the
-          <code>proof.merkleRoot</code> is written into the [=
-          documentStore/document store =].
-        </p>
-        <aside
-          class="example"
-          title="Proof object of a Verifiable Credential issued onto a document store"
-        >
-          <pre class="json">
-          {
-            // ...
-            "proof": {
-              "type": "OpenAttestationMerkleProofSignature2018",
-              "proofPurpose": "assertionMethod",
-              "targetHash": "5ed3579c3fe686973ca50100b4be6751e012ea079ad7d01cde5faff9a59cc68e",
-              "proofs": [],
-              "merkleRoot": "5ed3579c3fe686973ca50100b4be6751e012ea079ad7d01cde5faff9a59cc68e",
-              "salts": "abc...",
-              "privacy": {
-                "obfuscated": []
-              }
-            }
-          }
-        </pre
-          >
-          <p>
-            See full example
-            <a
-              href="https://github.com/Open-Attestation/oa-verify/blob/edeccf6b4c4613dc43c4eb7a0d97fce4897cad93/test/fixtures/v3/documentStore-issued.json#L60"
-              >here</a
-            >.
-          </p>
-        </aside>
-      </section>
-      <section>
-        <h3>Signed with a Decentralised Identifier (DID)</h3>
-        <p>
-          For signed Verifiable Credentials, the proof.merkleRoot is signed with
+          To issue an OpenAttestation Verifiable Credential, the proof.merkleRoot is signed with
           the Decentralised Identifier (DID) of the issuer and embedded in the
           <code>proof.proofs</code> property of the Verifiable Credential.
         </p>
@@ -245,6 +201,9 @@
               >here</a
             >.
           </p>
+          <p>
+          The OpenAttestation Verifiable Credential can also be issued by publishing the proof.merkleRoot to a Verifiable Data Registry.
+        </p>
         </aside>
       </section>
     </section>
