@@ -11,7 +11,13 @@ python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
 bikeshed = "^3.11.22"
+taskipy = "^1.10.4"
 
+[tool.taskipy.tasks]
+dev = "npx concurrently --kill-others 'task watch' 'task serve'"
+gen = "bikeshed spec index.bs"
+watch = "bikeshed watch index.bs"
+serve = "python -m http.server"
 
 [build-system]
 requires = ["poetry-core"]
